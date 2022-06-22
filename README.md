@@ -14,3 +14,7 @@ sudo systemctl enable nodered.service
 sudo reboot
 node-red admin init
 ```
+
+## Usage
+
+Open Node-Red interface and install the "node-red-contrib-modbus" module from the menu. Then import the weatherstation.json flow.
