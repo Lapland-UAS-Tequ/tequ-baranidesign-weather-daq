@@ -1,0 +1,609 @@
+[
+    {
+        "id": "fc0351ac.0e82",
+        "type": "tab",
+        "label": "RS485 HAT Modbus",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d0032da0.c6f7b8",
+        "type": "modbus-response",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "registerShowMax": "8",
+        "x": 170,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c58cff22.de2578",
+        "type": "inject",
+        "z": "fc0351ac.0e82",
+        "name": "SET Register 6 to 255",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[255]",
+        "payloadType": "json",
+        "x": 140,
+        "y": 500,
+        "wires": [
+            [
+                "ed8e9c94.6c98"
+            ]
+        ]
+    },
+    {
+        "id": "ed8e9c94.6c98",
+        "type": "modbus-write",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "unitid": "1",
+        "dataType": "MHoldingRegisters",
+        "adr": "1",
+        "quantity": "10",
+        "server": "75beb9d9.444ee",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 380,
+        "y": 520,
+        "wires": [
+            [],
+            [
+                "e03f5688.f2bee8"
+            ]
+        ]
+    },
+    {
+        "id": "e03f5688.f2bee8",
+        "type": "debug",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "8d17bc89.388878",
+        "type": "inject",
+        "z": "fc0351ac.0e82",
+        "name": "SET Register 6 to 0",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[0]",
+        "payloadType": "json",
+        "x": 150,
+        "y": 540,
+        "wires": [
+            [
+                "ed8e9c94.6c98"
+            ]
+        ]
+    },
+    {
+        "id": "ef662725b375bb52",
+        "type": "buffer-parser",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "int16be",
+                "name": "temperature",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "0.01",
+                "mask": ""
+            },
+            {
+                "type": "int16be",
+                "name": "dew",
+                "offset": 2,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "0.01",
+                "mask": ""
+            },
+            {
+                "type": "uint16be",
+                "name": "pressure_low",
+                "offset": 4,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint16be",
+                "name": "pressure_high",
+                "offset": 6,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "int16be",
+                "name": "relative",
+                "offset": 8,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "0.01",
+                "mask": ""
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "keyvalue",
+        "resultTypeType": "return",
+        "multipleResult": false,
+        "fanOutMultipleResult": false,
+        "setTopic": true,
+        "outputs": 1,
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "ad895ed01f60dcba",
+                "cd02f8cc94b0dbcc"
+            ]
+        ]
+    },
+    {
+        "id": "ad895ed01f60dcba",
+        "type": "function",
+        "z": "fc0351ac.0e82",
+        "name": "Calculate pressure",
+        "func": "pressure = (msg.payload.pressure_low + (msg.payload.pressure_high*65535) ) / 100\nnode.send({\"topic\":\"temperature\",\"payload\":msg.payload.temperature})\nnode.send({\"topic\":\"dew\",\"payload\":msg.payload.dew})\nnode.send({\"topic\":\"pressure\",\"payload\":pressure})\nnode.send({\"topic\":\"humidity\",\"payload\":msg.payload.relative})\n//return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 200,
+        "wires": [
+            [
+                "999022411be0147c"
+            ]
+        ]
+    },
+    {
+        "id": "c864f4aa80e17a85",
+        "type": "buffer-parser",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "int16be",
+                "name": "speed",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "0.01",
+                "mask": ""
+            },
+            {
+                "type": "uint16be",
+                "name": "direction",
+                "offset": 2,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "0.01",
+                "mask": ""
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "value",
+        "resultTypeType": "return",
+        "multipleResult": true,
+        "fanOutMultipleResult": false,
+        "setTopic": true,
+        "outputs": 1,
+        "x": 410,
+        "y": 280,
+        "wires": [
+            [
+                "da62df6fc8bab350",
+                "d0852c7d260dfc32"
+            ]
+        ]
+    },
+    {
+        "id": "d41e67f557bfe249",
+        "type": "modbus-read",
+        "z": "fc0351ac.0e82",
+        "name": "Read from MeteoTemp",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "unitid": "1",
+        "dataType": "InputRegister",
+        "adr": "0",
+        "quantity": "10",
+        "rate": "1000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "1",
+        "server": "75beb9d9.444ee",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "ef662725b375bb52"
+            ],
+            [
+                "d0032da0.c6f7b8"
+            ]
+        ]
+    },
+    {
+        "id": "ddca156f.2070a",
+        "type": "modbus-read",
+        "z": "fc0351ac.0e82",
+        "name": "Read from MeteoWind",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "unitid": "2",
+        "dataType": "InputRegister",
+        "adr": "5",
+        "quantity": "6",
+        "rate": "1000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "1",
+        "server": "75beb9d9.444ee",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 340,
+        "wires": [
+            [
+                "c864f4aa80e17a85"
+            ],
+            [
+                "d0032da0.c6f7b8"
+            ]
+        ]
+    },
+    {
+        "id": "da62df6fc8bab350",
+        "type": "debug",
+        "z": "fc0351ac.0e82",
+        "name": "MeteoWind buffer debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cd02f8cc94b0dbcc",
+        "type": "debug",
+        "z": "fc0351ac.0e82",
+        "name": "MeteoTemp buffer debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "71d9af57a5b33207",
+        "type": "debug",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "999022411be0147c",
+        "type": "smooth",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "property": "payload",
+        "action": "mean",
+        "count": "10",
+        "round": "2",
+        "mult": "multi",
+        "reduce": true,
+        "x": 780,
+        "y": 200,
+        "wires": [
+            [
+                "93e89b1879966379"
+            ]
+        ]
+    },
+    {
+        "id": "42ccf62012f7f096",
+        "type": "function",
+        "z": "fc0351ac.0e82",
+        "name": "Format Data MeteoTemp",
+        "func": "DataMessage = {\n   \"payload\":{\n      \"d\":{\n         \"1\":{\n            \"1\":{\n               \"v\":msg.payload.temperature\n            },\n            \"2\":{\n               \"v\":msg.payload.dew\n            },\n            \"3\":{\n               \"v\":msg.payload.humidity\n            },\n            \"4\":{\n               \"v\":msg.payload.pressure\n            }\n         }\n      },\n      \"ts\":new Date()\n   }\n}\nreturn DataMessage;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 180,
+        "wires": [
+            [
+                "71d9af57a5b33207",
+                "a0bc0ccf7c4f2954"
+            ]
+        ]
+    },
+    {
+        "id": "93e89b1879966379",
+        "type": "join",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "4",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 910,
+        "y": 200,
+        "wires": [
+            [
+                "42ccf62012f7f096"
+            ]
+        ]
+    },
+    {
+        "id": "d0852c7d260dfc32",
+        "type": "smooth",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "property": "payload",
+        "action": "mean",
+        "count": "10",
+        "round": "2",
+        "mult": "multi",
+        "reduce": true,
+        "x": 580,
+        "y": 320,
+        "wires": [
+            [
+                "7787b5efb0656bc3"
+            ]
+        ]
+    },
+    {
+        "id": "7787b5efb0656bc3",
+        "type": "join",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 730,
+        "y": 320,
+        "wires": [
+            [
+                "8ae8d38774b8ef8e"
+            ]
+        ]
+    },
+    {
+        "id": "8ae8d38774b8ef8e",
+        "type": "function",
+        "z": "fc0351ac.0e82",
+        "name": "Format data MeteoWind",
+        "func": "DataMessage = {\n   \"payload\":{\n      \"d\":{\n         \"2\":{\n            \"1\":{\n               \"v\":msg.payload.speed\n            },\n            \"2\":{\n               \"v\":msg.payload.direction\n            }\n         }\n      },\n      \"ts\":new Date()\n   }\n}\nreturn DataMessage;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 340,
+        "wires": [
+            [
+                "4beec4d96bbd62ea",
+                "a0bc0ccf7c4f2954"
+            ]
+        ]
+    },
+    {
+        "id": "4beec4d96bbd62ea",
+        "type": "debug",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a0bc0ccf7c4f2954",
+        "type": "mqtt out",
+        "z": "fc0351ac.0e82",
+        "name": "",
+        "topic": "iot-2/evt/data/fmt/json",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5aa0a247cdd167ff",
+        "x": 1460,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "75beb9d9.444ee",
+        "type": "modbus-client",
+        "name": "",
+        "clienttype": "serial",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "tcpHost": "127.0.0.1",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB0",
+        "serialType": "RTU",
+        "serialBaudrate": "19200",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "",
+        "unit_id": "1",
+        "commandDelay": "10",
+        "clientTimeout": "100",
+        "reconnectOnTimeout": false,
+        "reconnectTimeout": "",
+        "parallelUnitIdsAllowed": false
+    },
+    {
+        "id": "5aa0a247cdd167ff",
+        "type": "mqtt-broker",
+        "name": "weatherstation-200",
+        "broker": "i5u4t3.messaging.internetofthings.ibmcloud.com",
+        "port": "8883",
+        "tls": "14a94d36e43573b5",
+        "clientid": "d:i5u4t3:weatherstation:200",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "14a94d36e43573b5",
+        "type": "tls-config",
+        "name": "Watson-200",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
