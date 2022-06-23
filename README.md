@@ -23,10 +23,8 @@ Yes, white is ground.
 After that, just connect the other side of the supplied cable to the sensor and the adapter to you device's USB port.
 
 ### Raspberry PI users
+
 If you are using a Raspberry PI, you'll need to enable serial with `sudo raspi-config`
-
-
-
 
 ## Node-Red installation
 
@@ -40,3 +38,4 @@ node-red admin init
 ## Usage
 
 Open Node-Red interface and install the "node-red-contrib-modbus" module from the menu. Then import the weatherstation.json flow.
+It then should automatically start debugging data from the sensors, you may need to change the Unit-ID's or other settings and the server port.
