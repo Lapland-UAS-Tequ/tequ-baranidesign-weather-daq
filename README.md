@@ -38,4 +38,4 @@ node-red admin init
 ## Usage
 
 Open Node-Red interface and install the "node-red-contrib-modbus" module from the menu. Then import the weatherstation.json flow.
-It then should automatically start debugging data from the sensors, you may need to change the Unit-ID's or other settings and the server port.
+It then should automatically start debugging data from the sensors, you may need to change the Unit-ID's or other settings and the server port by clicking any of the modbus read/write nodes and going into the server configuration.
