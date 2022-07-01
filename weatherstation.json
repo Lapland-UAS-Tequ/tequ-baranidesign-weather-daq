@@ -367,7 +367,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1130,
+        "x": 1390,
         "y": 240,
         "wires": []
     },
@@ -405,8 +405,7 @@
         "y": 180,
         "wires": [
             [
-                "71d9af57a5b33207",
-                "a0bc0ccf7c4f2954"
+                "71d9af57a5b33207"
             ]
         ]
     },
@@ -500,8 +499,7 @@
         "y": 340,
         "wires": [
             [
-                "4beec4d96bbd62ea",
-                "a0bc0ccf7c4f2954"
+                "4beec4d96bbd62ea"
             ]
         ]
     },
@@ -517,26 +515,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1130,
+        "x": 1390,
         "y": 280,
-        "wires": []
-    },
-    {
-        "id": "a0bc0ccf7c4f2954",
-        "type": "mqtt out",
-        "z": "fc0351ac.0e82",
-        "name": "",
-        "topic": "iot-2/evt/data/fmt/json",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "5aa0a247cdd167ff",
-        "x": 1460,
-        "y": 260,
         "wires": []
     },
     {
@@ -564,46 +544,5 @@
         "reconnectOnTimeout": false,
         "reconnectTimeout": "",
         "parallelUnitIdsAllowed": false
-    },
-    {
-        "id": "5aa0a247cdd167ff",
-        "type": "mqtt-broker",
-        "name": "weatherstation-200",
-        "broker": "i5u4t3.messaging.internetofthings.ibmcloud.com",
-        "port": "8883",
-        "tls": "14a94d36e43573b5",
-        "clientid": "d:i5u4t3:weatherstation:200",
-        "autoConnect": true,
-        "usetls": true,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "sessionExpiry": ""
-    },
-    {
-        "id": "14a94d36e43573b5",
-        "type": "tls-config",
-        "name": "Watson-200",
-        "cert": "",
-        "key": "",
-        "ca": "",
-        "certname": "",
-        "keyname": "",
-        "caname": "",
-        "servername": "",
-        "verifyservercert": false,
-        "alpnprotocol": ""
     }
 ]
